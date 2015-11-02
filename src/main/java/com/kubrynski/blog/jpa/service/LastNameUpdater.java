@@ -2,6 +2,7 @@ package com.kubrynski.blog.jpa.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,20 +19,20 @@ import com.kubrynski.blog.jpa.repo.PersonRepository;
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class LastNameUpdater {
 
-    private final PersonRepository personRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public LastNameUpdater(PersonRepository personRepository, ApplicationEventPublisher applicationEventPublisher) {
-        this.personRepository = personRepository;
+    public LastNameUpdater(JdbcTemplate jdbcTemplate,
+            ApplicationEventPublisher applicationEventPublisher) {
+        this.jdbcTemplate = jdbcTemplate;
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Async
     public void update(String uuid, String newName) {
-        Person person = personRepository.findByUuid(uuid);
-        person.setLastName(newName);
+        jdbcTemplate.update("UPDATE person SET last_name = ? WHERE uuid = ?", newName, uuid);
         applicationEventPublisher.publishEvent(new FieldUpdatedEvent());
     }
 
