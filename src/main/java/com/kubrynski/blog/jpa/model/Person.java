@@ -5,10 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 /**
  * @author Jakub Kubrynski
  */
 @Entity
+@DynamicUpdate
 public class Person {
 
     @Id

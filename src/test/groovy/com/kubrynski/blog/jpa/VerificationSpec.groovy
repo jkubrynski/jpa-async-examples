@@ -36,6 +36,7 @@ class VerificationSpec extends Specification {
         then:
             helper.waitUntilFinished()
             Person personToCheck = personRepository.findByUuid(person.uuid)
-            personToCheck.firstName == null || personToCheck.lastName == null
+            personToCheck.firstName == "Jerry"
+            personToCheck.lastName == "Newman"
     }
 }
