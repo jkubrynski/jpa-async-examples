@@ -7,6 +7,7 @@ import javax.persistence.Version;
 import java.util.UUID;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLock;
 
 /**
  * @author Jakub Kubrynski
@@ -24,8 +25,10 @@ public class Person {
 
     private String uuid = UUID.randomUUID().toString();
 
+    @OptimisticLock(excluded = true)
     private String firstName;
 
+    @OptimisticLock(excluded = true)
     private String lastName;
 
     public String getUuid() {
