@@ -23,6 +23,9 @@ class VerificationSpec extends Specification {
     @Autowired
     LastNameUpdater lastNameUpdater
 
+    @Autowired
+    SynchronizationHelper helper
+
     def 'update two fields in separate transactions'() {
         given:
             Person person = new Person()
@@ -31,8 +34,8 @@ class VerificationSpec extends Specification {
             firstNameUpdater.update(person.uuid, "Jerry")
             lastNameUpdater.update(person.uuid, "Newman")
         then:
+            helper.waitUntilFinished()
             Person personToCheck = personRepository.findByUuid(person.uuid)
-            personToCheck.firstName == "Jerry"
-            personToCheck.lastName == "Newman"
+            personToCheck.firstName == null || personToCheck.lastName == null
     }
 }
