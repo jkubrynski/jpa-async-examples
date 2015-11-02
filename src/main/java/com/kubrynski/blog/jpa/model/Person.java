@@ -3,6 +3,7 @@ package com.kubrynski.blog.jpa.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Version;
 import java.util.UUID;
 
 import org.hibernate.annotations.DynamicUpdate;
@@ -17,6 +18,9 @@ public class Person {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Version
+    private int version;
 
     private String uuid = UUID.randomUUID().toString();
 
